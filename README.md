@@ -1,1 +1,1 @@
-# login-discord
+# discord-nitro
